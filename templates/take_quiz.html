@@ -1,0 +1,12 @@
+<h2>Take the test</h2>
+
+<form role="form" method="post">
+	{{ form.csrf_token }}
+	<div class="textarea">
+		{{ form.essay_question.label }}{{ form.essay_question}}
+	</div>
+	<div class="text">
+		{{ form.email_addr.label }}{{ form.email_addr }}
+	</div>
+	{{ form.submit }}
+</form>
