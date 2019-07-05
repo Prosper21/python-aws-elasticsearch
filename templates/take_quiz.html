@@ -1,12 +1,11 @@
-<h2>Take the test</h2>
-
-<form role="form" method="post">
-	{{ form.csrf_token }}
-	<div class="textarea">
-		{{ form.essay_question.label }}{{ form.essay_question}}
-	</div>
-	<div class="text">
-		{{ form.email_addr.label }}{{ form.email_addr }}
-	</div>
-	{{ form.submit }}
-</form>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+	<h3>Please answer this very important question.</h3>
+	<p>If you don't it'll go on your permanent record!.</p>
+	<hr>
+		{{ wtf.quick_form(form) }}
+	</hr>
+</div>
+{% endblock %}

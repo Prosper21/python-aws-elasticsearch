@@ -5,8 +5,13 @@ from datetime import datetime
 from config import DevConfig
 import json
 
+# Use bootstrap for better looking forms
+from flask_bootstrap import Bootstrap
+
 application = Flask(__name__)
 application.config.from_object(DevConfig)
+
+Bootstrap(application)
 
 class ESConnection(AWSAuthConnection):
 
@@ -28,10 +33,19 @@ def make_connect():
 		host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
 		is_secure=False)
 
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"%s - %s" % (
+                getattr(form, field).label.text,
+                error
+            ))
+
 @application.route('/', methods=['GET', 'POST'])
 def take_test():
 	form = QuizForm(request.form)
 	if not form.validate_on_submit():
+		flash_errors(form)
 		return render_template('take_quiz.html', form=form)
 	if request.method == 'POST':
 		completed_quiz = Quiz(tags=['v0.1'])
