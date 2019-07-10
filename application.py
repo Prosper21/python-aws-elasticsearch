@@ -8,10 +8,31 @@ import json
 # Use bootstrap for better looking forms
 from flask_bootstrap import Bootstrap
 
+# celery for asynchronous tasks
+from celery import Celery
+
+def make_celery(application):
+	celery = Celery(application.import_name, broker=application.config['CELERY_BROKER_URL'])
+	celery.conf.update(application.config)
+	TaskBase = celery.Task
+	class ContextTask(TaskBase):
+		abstract = True
+		def __call__(self, *args, **kwargs):
+			with application.app_context():
+				return TaskBase.__call__(self, *args, **kwargs)
+	celery.Task = ContextTask
+	return celery
+
 application = Flask(__name__)
 application.config.from_object(DevConfig)
 
+# Point to the ASW SQS queue (Be sure to add your SQS URL below!)
+application.config.update(CELERY_BROKER_URL='sqs://sqs.us-east-1.amazonaws.com/169639297394/flask-es')
+
 Bootstrap(application)
+
+# Wrap the bootstrapped application in celery
+celery = make_celery(application)
 
 class ESConnection(AWSAuthConnection):
 
@@ -63,7 +84,13 @@ def take_test():
 		# print statements to check if index has been created in elasticsearch
 		print(esdata)
 		print(dict_resp)
-		return 'Submitted!'
+		flash('Survey sbmitted!')
+
+		# The asynch task
+		get_location.delay(dict_resp['_id'],completed_quiz.client_ip_addr)
+		# Asych task complete
+		return 'Thank You!'
+
 
 if __name__ == '__main__':
 	application.run(host='0.0.0.0')
