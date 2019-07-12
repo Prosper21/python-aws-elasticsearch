@@ -11,6 +11,8 @@ from flask_bootstrap import Bootstrap
 # celery for asynchronous tasks
 from celery import Celery
 
+from tasks import get_location
+
 def make_celery(application):
 	celery = Celery(application.import_name, broker=application.config['CELERY_BROKER_URL'])
 	celery.conf.update(application.config)
