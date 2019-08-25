@@ -18,5 +18,5 @@ if __name__ == "__main__":
 			is_secure=False)
 
 	headers = {'Content-Type':'application/json'}
-	resp = client.make_request(method='GET',headers=headers,path='/big_survey/quiz/_search',data='{ "query" : { "match_all" : { } } }')
+	resp = client.make_request(method='POST',headers=headers,path='/big_survey/quiz/_search',data='{ "query" : { "match_all" : { } } }')
 	print(resp.read())

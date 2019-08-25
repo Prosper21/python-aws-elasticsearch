@@ -2,7 +2,7 @@ from boto.connection import AWSAuthConnection
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models import Quiz, QuizForm
 from datetime import datetime
-from config import DevConfig
+from config import ProdConfig, CeleryConfig
 import json
 
 # Use bootstrap for better looking forms
@@ -14,7 +14,7 @@ from celery import Celery
 from tasks import get_location
 
 def make_celery(application):
-	celery = Celery(application.import_name, broker=application.config['CELERY_BROKER_URL'])
+	celery = Celery(application.import_name, broker=application.config['broker_url'])
 	celery.conf.update(application.config)
 	TaskBase = celery.Task
 	class ContextTask(TaskBase):
@@ -26,10 +26,8 @@ def make_celery(application):
 	return celery
 
 application = Flask(__name__)
-application.config.from_object(DevConfig)
-
-# Point to the ASW SQS queue (Be sure to add your SQS URL below!)
-application.config.update(CELERY_BROKER_URL='sqs://sqs.us-east-1.amazonaws.com/169639297394/flask-es')
+application.config.from_object(ProdConfig)
+application.config.update(broker_url=CeleryConfig.broker_url)
 
 Bootstrap(application)
 
@@ -89,7 +87,9 @@ def take_test():
 		flash('Survey sbmitted!')
 
 		# The asynch task
-		get_location.delay(dict_resp['_id'],completed_quiz.client_ip_addr)
+		#get_location.delay(dict_resp['_id'],completed_quiz.client_ip_addr)
+		get_location.delay(dict_resp['_id'],'154.226.175.219')	# had to use my ip address otherwise it defaults to '127.0.0.1'
+		
 		# Asych task complete
 		return 'Thank You!'
 

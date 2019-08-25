@@ -6,5 +6,8 @@ load_dotenv()
 class Config:
 	SECRET_KEY = os.getenv('SECRET_KEY')
 
-class DevConfig(Config):
-    DEBUG = True
+class ProdConfig(Config):
+    DEBUG = False
+
+class CeleryConfig:
+	broker_url = os.getenv('REDIS_URL')

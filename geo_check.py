@@ -17,7 +17,7 @@ if __name__ == "__main__":
             host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
             is_secure=False)
 
-    query = '{"query":{"filtered":{"filter":{"exists":{"field":"geo"}}}}}'
+    query = '{"query":{"bool":{"filter":{"exists":{"field":"geo"}}}}}'
     headers = {'Content-Type':'application/json'}
-    resp = client.make_request(method='GET',path='/big_survey/quiz/_search',headers=headers,data=query,params={"pretty":"true"})
-    print resp.read()
+    resp = client.make_request(method='POST',headers=headers,path='/big_survey/quiz/_search',data=query)
+    print(resp.read())
