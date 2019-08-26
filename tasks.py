@@ -1,7 +1,7 @@
 from boto.connection import AWSAuthConnection
 import requests
 from celery import Celery
-from config import CeleryConfig
+from config import CeleryConfig, AWSConfig
 
 application = Celery('tasks')
 application.config_from_object(CeleryConfig)
@@ -15,9 +15,11 @@ class ESConnection(AWSAuthConnection):
         return ['hmac-v4']
 
 client = ESConnection(
-      region='us-east-1',
-      host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
-      is_secure=False)
+    aws_access_key_id=AWSConfig.aws_access_key_id,
+    aws_secret_access_key=AWSConfig.aws_secret_access_key,
+    region='us-east-1',
+    host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
+    is_secure=False)
 
 @application.task
 def get_location(user,address):

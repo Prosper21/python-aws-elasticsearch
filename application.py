@@ -2,7 +2,7 @@ from boto.connection import AWSAuthConnection
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models import Quiz, QuizForm
 from datetime import datetime
-from config import ProdConfig, CeleryConfig
+from config import ProdConfig, CeleryConfig, AWSConfig
 import json
 
 # Use bootstrap for better looking forms
@@ -49,6 +49,8 @@ def make_connect():
 	global client
 	# Note, boto receives credentials from the EC2 instance's IAM Role
 	client = ESConnection(
+		aws_access_key_id=AWSConfig.aws_access_key_id,
+        aws_secret_access_key=AWSConfig.aws_secret_access_key,
 		region='us-east-1',
 		# Be sure to put the URL for your Elasticsearch endpoint below!
 		host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',

@@ -1,4 +1,5 @@
 from boto.connection import AWSAuthConnection
+from config import AWSConfig
 
 class ESConnection(AWSAuthConnection):
 
@@ -12,10 +13,12 @@ class ESConnection(AWSAuthConnection):
 
 if __name__ == "__main__":
 	client = ESConnection(
-			region='us-east-1',
-			# Be sure to put the URL for your Elasticsearch endpoint below!
-			host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
-			is_secure=False)
+		aws_access_key_id=AWSConfig.aws_access_key_id,
+    	aws_secret_access_key=AWSConfig.aws_secret_access_key,
+		region='us-east-1',
+		# Be sure to put the URL for your Elasticsearch endpoint below!
+		host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
+		is_secure=False)
 
 	headers = {'Content-Type':'application/json'}
 	resp = client.make_request(method='POST',headers=headers,path='/big_survey/quiz/_search',data='{ "query" : { "match_all" : { } } }')
