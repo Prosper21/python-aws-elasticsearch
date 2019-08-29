@@ -15,10 +15,10 @@ class ESConnection(AWSAuthConnection):
         return ['hmac-v4']
 
 client = ESConnection(
-    aws_access_key_id=AWSConfig.aws_access_key_id,
-    aws_secret_access_key=AWSConfig.aws_secret_access_key,
     region='us-east-1',
     host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
+    aws_access_key_id=AWSConfig.aws_access_key_id,
+    aws_secret_access_key=AWSConfig.aws_secret_access_key,
     is_secure=False)
 
 @application.task
