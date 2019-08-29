@@ -55,16 +55,16 @@ def make_connect():
 		# Be sure to put the URL for your Elasticsearch endpoint below!
 		host='search-test-domain-jxyhg5lk2ux3hzgh43ar2gbpde.us-east-1.es.amazonaws.com',
 		aws_access_key_id=AWSConfig.aws_access_key_id,
-        aws_secret_access_key=AWSConfig.aws_secret_access_key,
+		aws_secret_access_key=AWSConfig.aws_secret_access_key,
 		is_secure=False)
 
 def flash_errors(form):
-    for field, errors in form.errors.items():
-        for error in errors:
-            flash(u"%s - %s" % (
-                getattr(form, field).label.text,
-                error
-            ))
+	for field, errors in form.errors.items():
+		for error in errors:
+			flash(u"%s - %s" % (
+				getattr(form, field).label.text,
+				error
+			))
 
 @application.route('/', methods=['GET', 'POST'])
 def take_test():
@@ -101,7 +101,7 @@ def take_test():
 if __name__ == '__main__':
 	#application.run(host='0.0.0.0')
 	port = int(os.environ.get('PORT', 5000))
-    host = '0.0.0.0'
-    http_server = WSGIServer((host, port), application)
-    print("Starting server on port {}".format(port))
-    http_server.serve_forever()
+	host = '0.0.0.0'
+	http_server = WSGIServer((host, port), application)
+	print("Starting server on port {}".format(port))
+	http_server.serve_forever()
