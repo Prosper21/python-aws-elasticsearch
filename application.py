@@ -4,6 +4,8 @@ from models import Quiz, QuizForm
 from datetime import datetime
 from config import ProdConfig, CeleryConfig, AWSConfig
 import json
+from gevent.pywsgi import WSGIServer
+
 
 # Use bootstrap for better looking forms
 from flask_bootstrap import Bootstrap
@@ -97,4 +99,9 @@ def take_test():
 
 
 if __name__ == '__main__':
-	application.run(host='0.0.0.0')
+	#application.run(host='0.0.0.0')
+	port = int(os.environ.get('PORT', 5000))
+    host = '0.0.0.0'
+    http_server = WSGIServer((host, port), application)
+    print("Starting server on port {}".format(port))
+    http_server.serve_forever()
