@@ -1,4 +1,4 @@
-from flask_wtf import FlaskForm 
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import TextField, SubmitField, TextAreaField
 from wtforms.validators import Length, Email, DataRequired
 from elasticsearch_dsl import DocType, Text, Boolean
@@ -19,4 +19,5 @@ class QuizForm(FlaskForm):
 	essay_question = TextAreaField('Who do you think won the console wars of 1991, Sega Genesis or Super Nintendo? (2048 characters)', validators=[DataRequired(),Length(max=2047)])
 	submit = SubmitField('Submit')
 	email_addr = TextField('Enter Your Email', validators=[DataRequired(), Email()])
+	recaptcha = RecaptchaField()
 	submit = SubmitField('Submit')

@@ -8,6 +8,9 @@ class Config:
 
 class ProdConfig(Config):
 	DEBUG = False
+	RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
+	RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
+
 
 class CeleryConfig:
 	broker_url = os.getenv('REDIS_URL')
